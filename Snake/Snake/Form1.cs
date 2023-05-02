@@ -19,7 +19,6 @@ namespace Snake
         private Marcador marcador;
         private Serpiente serpiente;
         private Comidas comida;
-        private Giro direcciones;
         private const Keys arriba = Keys.Up;
         private const Keys abajo = Keys.Down;
         private const Keys izquierda = Keys.Left;
@@ -53,8 +52,6 @@ namespace Snake
             tiempo.Start();
             ultimoTiempo = 0.0;
             ultimaDireccion = Direcciones.Arriba;
-            direcciones = new Giro();
-            direcciones.giros = new List<Direcciones>();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -92,10 +89,10 @@ namespace Snake
             //double tiempoTranscurrido = tiempoJuego-ultimoTiempo;
             //ultimoTiempo = tiempoJuego;
             this.BackColor = Color.Gray;
-            direcciones.giros.Add(ultimaDireccion);
-            serpiente.MoverSerpiente(ultimaDireccion);
-            serpiente.MoverCuerpo(direcciones);
-            Thread.Sleep(40);
+            serpiente.cabeza.Direccion = ultimaDireccion;
+            serpiente.MoverSerpiente();
+            //serpiente.MoverCuerpo();
+            Thread.Sleep(1000);
             this.Invalidate();
         }
     }

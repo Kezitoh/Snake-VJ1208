@@ -11,6 +11,9 @@ namespace Snake
     {
         public List<Direcciones> giros;
 
-
+        public Giro(List<Direcciones> giros)
+        {
+            this.giros = giros;
+        }
     }
 }

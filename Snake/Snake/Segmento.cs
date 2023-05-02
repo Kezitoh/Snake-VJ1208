@@ -15,8 +15,8 @@ namespace Snake
         private Point pos;
         private int size;
         private Color color;
-        private string direccion;
-        public Segmento(Point pos, int size, Color color, string direccion)
+        public Direcciones Direccion { get; set; }
+        public Segmento(Point pos, int size, Color color, Direcciones direccion)
         {
             picBox.Location = pos;
             picBox.Size = new Size(size, size);
@@ -24,7 +24,7 @@ namespace Snake
             this.pos = pos;
             this.size = size;
             this.color = color;
-            this.direccion = direccion;
+            Direccion = direccion;
         }
     }
 }

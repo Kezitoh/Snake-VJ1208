@@ -20,58 +20,60 @@ namespace Snake
 		{
 			picCuerpo = new List<PictureBox>();
 			cuerpo = new List<Segmento>();
-			cabeza = new Segmento(posInicial, 20, Color.Green, "");
-			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 20), 20, Color.LightGreen, ""));
-			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 40), 20, Color.LightGreen, ""));
+			cabeza = new Segmento(posInicial, 20, Color.Green, Direcciones.Arriba);
+			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 20), 20, Color.LightGreen, Direcciones.Arriba));
+			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 40), 20, Color.LightGreen, Direcciones.Arriba));
 			picBox = cabeza.PicBox;
 			picCuerpo.Add(cuerpo[0].PicBox);
 			picCuerpo.Add(cuerpo[1].PicBox);
-
+			giro = new Giro(new List<Direcciones>() { Direcciones.Arriba, Direcciones.Arriba});
 		}
 
-		public void MoverSerpiente(Direcciones d)
+		public void MoverSerpiente()
 		{
-			switch (d)
+			switch (cabeza.Direccion)
 			{
 				case Direcciones.Arriba:
-					picBox.Top -= 1;
+					picBox.Top -= 20;
 					break;
 				case Direcciones.Abajo:
-					picBox.Top += 1;
+					picBox.Top += 20;
 					break;
 				case Direcciones.Izquierda:
-					picBox.Left -= 1;
+					picBox.Left -= 20;
 					break;
 				case Direcciones.Derecha:
-					picBox.Left += 1;
+					picBox.Left += 20;
 					break;
 			}
+            giro.giros.Add(cabeza.Direccion);
+			MoverCuerpo();
 		}
 
-		public void MoverCuerpo(Giro g)
+		public void MoverCuerpo()
 		{
 			for (int i = 0; i < cuerpo.Count; i++)
 			{
-				for (int j = g.giros.Count - 1; j >= 0; j--)
+				int j = giro.giros.Count - 1 - i;
 				{
-					switch (g.giros[j])
+					switch (giro.giros[j])
 					{
 						case Direcciones.Arriba:
-							cuerpo[i].PicBox.Top -= 1;
+							cuerpo[i].PicBox.Top -= 20;
 							break;
 						case Direcciones.Abajo:
-							cuerpo[i].PicBox.Top += 1;
+							cuerpo[i].PicBox.Top += 20;
 							break;
 						case Direcciones.Izquierda:
-							cuerpo[i].PicBox.Left -= 1;
+							cuerpo[i].PicBox.Left -= 20;
 							break;
 						case Direcciones.Derecha:
-							cuerpo[i].PicBox.Left += 1;
+							cuerpo[i].PicBox.Left += 20;
 							break;
 					}
 				}
 			}
-			g.giros.Remove(g.giros[0]);
+			giro.giros.Remove(giro.giros[0]);
 		}
 	}
 }
