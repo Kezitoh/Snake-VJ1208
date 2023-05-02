@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Snake
 {
+    enum Direcciones { Izquierda, Derecha, Arriba, Abajo }
     internal class Giro
     {
+        public List<Direcciones> giros;
+
+
     }
 }
