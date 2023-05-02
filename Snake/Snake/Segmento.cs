@@ -12,7 +12,7 @@ namespace Snake
     {
         private PictureBox picBox = new PictureBox();
         public PictureBox PicBox { get { return picBox; } }
-        private Point pos;
+        public Point Pos { get; set; }
         private int size;
         private Color color;
         public Direcciones Direccion { get; set; }
@@ -21,7 +21,7 @@ namespace Snake
             picBox.Location = pos;
             picBox.Size = new Size(size, size);
             picBox.BackColor = color;
-            this.pos = pos;
+            Pos = pos;
             this.size = size;
             this.color = color;
             Direccion = direccion;

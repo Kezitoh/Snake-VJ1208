@@ -26,6 +26,7 @@ namespace Snake
         private Stopwatch tiempo;
         private double ultimoTiempo;
         private Direcciones ultimaDireccion;
+        private Point posicion;
 
 
         public Form1()
@@ -52,6 +53,7 @@ namespace Snake
             tiempo.Start();
             ultimoTiempo = 0.0;
             ultimaDireccion = Direcciones.Arriba;
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -79,6 +81,8 @@ namespace Snake
                     //                ultimaDireccion = Direcciones.Arriba;
                     //                break;
             }
+            posicion = serpiente.cabeza.Pos;
+            serpiente.giro.Giros.Add(posicion, ultimaDireccion);
         }
 
 

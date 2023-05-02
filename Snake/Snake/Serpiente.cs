@@ -26,7 +26,7 @@ namespace Snake
 			picBox = cabeza.PicBox;
 			picCuerpo.Add(cuerpo[0].PicBox);
 			picCuerpo.Add(cuerpo[1].PicBox);
-			giro = new Giro(new List<Direcciones>() { Direcciones.Arriba, Direcciones.Arriba});
+			giro = new Giro(new Dictionary<Point, Direcciones>());
 		}
 
 		public void MoverSerpiente()
@@ -46,7 +46,7 @@ namespace Snake
 					picBox.Left += 20;
 					break;
 			}
-            giro.giros.Add(cabeza.Direccion);
+			
 			MoverCuerpo();
 		}
 
@@ -54,26 +54,32 @@ namespace Snake
 		{
 			for (int i = 0; i < cuerpo.Count; i++)
 			{
-				int j = giro.giros.Count - 1 - i;
+				if (giro.Giros.ContainsKey(cuerpo[i].Pos))
 				{
-					switch (giro.giros[j])
-					{
-						case Direcciones.Arriba:
-							cuerpo[i].PicBox.Top -= 20;
-							break;
-						case Direcciones.Abajo:
-							cuerpo[i].PicBox.Top += 20;
-							break;
-						case Direcciones.Izquierda:
-							cuerpo[i].PicBox.Left -= 20;
-							break;
-						case Direcciones.Derecha:
-							cuerpo[i].PicBox.Left += 20;
-							break;
-					}
+					cuerpo[i].Direccion = giro.Giros[cuerpo[i].Pos];
 				}
+				
+				switch (cuerpo[i].Direccion)
+				{
+					case Direcciones.Arriba:
+						cuerpo[i].PicBox.Top -= 20;
+						break;
+					case Direcciones.Abajo:
+						cuerpo[i].PicBox.Top += 20;
+						break;
+					case Direcciones.Izquierda:
+						cuerpo[i].PicBox.Left -= 20;
+						break;
+					case Direcciones.Derecha:
+						cuerpo[i].PicBox.Left += 20;
+						break;
+				}
+				
 			}
-			giro.giros.Remove(giro.giros[0]);
+			if (giro.Giros.Count > 0)
+			{
+				giro.Giros.Remove(giro.Giros.Keys.First()); // Vamos a la lista de claves y sacamos la primera posición para borrar la pareja de datos
+			}
 		}
 	}
 }
