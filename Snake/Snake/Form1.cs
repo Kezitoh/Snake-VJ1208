@@ -83,6 +83,8 @@ namespace Snake
             }
             posicion = serpiente.cabeza.Pos;
             serpiente.giro.Giros.Add(posicion, ultimaDireccion);
+            Console.WriteLine($"Posicion: {posicion}, Direccion: {serpiente.giro.Giros[posicion]}");
+
         }
 
 
@@ -96,7 +98,7 @@ namespace Snake
             serpiente.cabeza.Direccion = ultimaDireccion;
             serpiente.MoverSerpiente();
             //serpiente.MoverCuerpo();
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             this.Invalidate();
         }
     }

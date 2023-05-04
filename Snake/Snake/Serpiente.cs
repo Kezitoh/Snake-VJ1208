@@ -35,15 +35,19 @@ namespace Snake
 			{
 				case Direcciones.Arriba:
 					picBox.Top -= 20;
+					cabeza.Pos = new Point(cabeza.Pos.X, cabeza.Pos.Y-20);
 					break;
 				case Direcciones.Abajo:
 					picBox.Top += 20;
+					cabeza.Pos = new Point(cabeza.Pos.X, cabeza.Pos.Y+20);
 					break;
 				case Direcciones.Izquierda:
 					picBox.Left -= 20;
+					cabeza.Pos = new Point(cabeza.Pos.X-20, cabeza.Pos.Y);
 					break;
 				case Direcciones.Derecha:
 					picBox.Left += 20;
+					cabeza.Pos = new Point(cabeza.Pos.X+20, cabeza.Pos.Y);
 					break;
 			}
 			
@@ -54,32 +58,38 @@ namespace Snake
 		{
 			for (int i = 0; i < cuerpo.Count; i++)
 			{
+				Console.WriteLine($"Pos: {cuerpo[i].Pos}, Existe: {giro.Giros.ContainsKey(cuerpo[i].Pos)}");
 				if (giro.Giros.ContainsKey(cuerpo[i].Pos))
 				{
 					cuerpo[i].Direccion = giro.Giros[cuerpo[i].Pos];
+					if (cuerpo[i] == cuerpo[cuerpo.Count-1])
+					{
+						giro.Giros.Remove(giro.Giros.Keys.First()); // Vamos a la lista de claves y sacamos la primera posición para borrar la pareja de datos
+					}
 				}
 				
 				switch (cuerpo[i].Direccion)
 				{
 					case Direcciones.Arriba:
 						cuerpo[i].PicBox.Top -= 20;
+						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X, cuerpo[i].Pos.Y - 20);
 						break;
 					case Direcciones.Abajo:
 						cuerpo[i].PicBox.Top += 20;
+						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X, cuerpo[i].Pos.Y + 20);
 						break;
 					case Direcciones.Izquierda:
 						cuerpo[i].PicBox.Left -= 20;
+						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X -20, cuerpo[i].Pos.Y);
 						break;
 					case Direcciones.Derecha:
 						cuerpo[i].PicBox.Left += 20;
+						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X +20, cuerpo[i].Pos.Y);
 						break;
 				}
 				
 			}
-			if (giro.Giros.Count > 0)
-			{
-				giro.Giros.Remove(giro.Giros.Keys.First()); // Vamos a la lista de claves y sacamos la primera posición para borrar la pareja de datos
-			}
+			
 		}
 	}
 }
