@@ -4,17 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Snake
 {
-    enum Direcciones { Izquierda, Derecha, Arriba, Abajo }
+    
     internal class Giro
     {
-        public Dictionary<Point, Direcciones> Giros { get; set; }
+        public Point Punto { get; set; }
+        public Keys Direccion { get; set; }
 
-        public Giro(Dictionary<Point,Direcciones> giros)
+        public Giro(Point punto, Keys key)
         {
-            Giros = giros;
+            Punto = punto;
+            Direccion = key;
         }
     }
 }

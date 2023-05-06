@@ -25,7 +25,8 @@ namespace Snake
         private const Keys derecha = Keys.Right;
         private Stopwatch tiempo;
         private double ultimoTiempo;
-        private Direcciones ultimaDireccion;
+        private double contadorTiempo;
+        private Keys ultimaDireccion;
         private Point posicion;
 
 
@@ -39,12 +40,12 @@ namespace Snake
             this.Text = "Serpiente VJ1208 ...";
             this.Width = anchoEscenario;
             this.Height = altoEscenario;
-            this.BackColor = Color.DarkRed;
+            this.BackColor = Color.LightGray;
             serpiente = new Serpiente(new Point(this.Width / 2, this.Height / 2)); // Aquí se crea
             Controls.Add(serpiente.picBox); // Aquí se añade a Controls
             Controls.Add(serpiente.picCuerpo[0]);
             Controls.Add(serpiente.picCuerpo[1]);
-            comida = new Comidas();
+            comida = new Comidas(anchoEscenario, altoEscenario, serpiente, Controls);
             //Controls.Add(comida.MiPictureBox);
             marcador = new Marcador();
             Controls.Add(marcador.Informacion);
@@ -52,7 +53,7 @@ namespace Snake
             tiempo = new Stopwatch();
             tiempo.Start();
             ultimoTiempo = 0.0;
-            ultimaDireccion = Direcciones.Arriba;
+            ultimaDireccion = arriba;
 
         }
 
@@ -66,24 +67,25 @@ namespace Snake
             switch (e.KeyCode)
             {
                 case arriba:
-                    ultimaDireccion = Direcciones.Arriba;
+                    ultimaDireccion = arriba;
                     break;
                 case abajo:
-                    ultimaDireccion = Direcciones.Abajo;
+                    ultimaDireccion = abajo;
                     break;
                 case izquierda:
-                    ultimaDireccion = Direcciones.Izquierda;
+                    ultimaDireccion = izquierda;
                     break;
                 case derecha:
-                    ultimaDireccion = Direcciones.Derecha;
+                    ultimaDireccion = derecha;
                     break;
                     //default:
                     //                ultimaDireccion = Direcciones.Arriba;
                     //                break;
             }
-            posicion = serpiente.cabeza.Pos;
-            serpiente.giro.Giros.Add(posicion, ultimaDireccion);
-            Console.WriteLine($"Posicion: {posicion}, Direccion: {serpiente.giro.Giros[posicion]}");
+            posicion = serpiente.cabeza.PicBox.Location;
+            serpiente.cabeza.Direccion = ultimaDireccion;
+            serpiente.giros.Add(new Giro(posicion, ultimaDireccion));
+            //Console.WriteLine($"Posicion: {posicion}, Direccion: {serpiente.giros.Last()}");
 
         }
 
@@ -91,14 +93,21 @@ namespace Snake
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            //double tiempoJuego = tiempo.ElapsedMilliseconds;
-            //double tiempoTranscurrido = tiempoJuego-ultimoTiempo;
-            //ultimoTiempo = tiempoJuego;
-            this.BackColor = Color.Gray;
-            serpiente.cabeza.Direccion = ultimaDireccion;
-            serpiente.MoverSerpiente();
+            double tiempoJuego = tiempo.ElapsedMilliseconds;
+            double tiempoTranscurrido = tiempoJuego - ultimoTiempo;
+            ultimoTiempo = tiempoJuego;
+            contadorTiempo += tiempoTranscurrido;
+            
+            if(contadorTiempo%10 == 0)
+            {
+                marcador.Actualizar();
+                serpiente.Actualizar();
+                comida.Actualizar(marcador);
+            }
+
+            if (contadorTiempo >= 10000) contadorTiempo = 0;
+
             //serpiente.MoverCuerpo();
-            Thread.Sleep(500);
             this.Invalidate();
         }
     }

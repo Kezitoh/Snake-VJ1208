@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace Snake
             informacion.Font = new Font("Courier", 18);
             informacion.AutoSize = true;
             informacion.Location = new Point(0,0);
+            informacion.BackColor = Color.Transparent;
             Puntos = 0;
             TiempoVida = 10;
             informacion.Text = $"Puntos: {Puntos}\nTiempo: {TiempoVida}";
@@ -26,7 +28,8 @@ namespace Snake
 
         public void Actualizar()
         {
-
+            informacion.Text = $"Puntos: {Puntos}\nTiempo: {--TiempoVida}";
+            informacion.Refresh();
         }
     }
 }

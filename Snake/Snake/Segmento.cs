@@ -10,18 +10,17 @@ namespace Snake
 {
     internal class Segmento
     {
-        private PictureBox picBox = new PictureBox();
+        private PictureBox picBox;
         public PictureBox PicBox { get { return picBox; } }
-        public Point Pos { get; set; }
         private int size;
         private Color color;
-        public Direcciones Direccion { get; set; }
-        public Segmento(Point pos, int size, Color color, Direcciones direccion)
+        public Keys Direccion { get; set; }
+        public Segmento(Point pos, int size, Color color, Keys direccion)
         {
+            picBox = new PictureBox();
             picBox.Location = pos;
             picBox.Size = new Size(size, size);
             picBox.BackColor = color;
-            Pos = pos;
             this.size = size;
             this.color = color;
             Direccion = direccion;

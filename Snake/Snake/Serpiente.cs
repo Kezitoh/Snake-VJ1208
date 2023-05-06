@@ -15,81 +15,107 @@ namespace Snake
 		public Segmento cabeza;
 		public PictureBox picBox;
 		public List<PictureBox> picCuerpo;
-		public Giro giro;
+		public List<Giro> giros;
 		public Serpiente(Point posInicial)
 		{
 			picCuerpo = new List<PictureBox>();
 			cuerpo = new List<Segmento>();
-			cabeza = new Segmento(posInicial, 20, Color.Green, Direcciones.Arriba);
-			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 20), 20, Color.LightGreen, Direcciones.Arriba));
-			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 40), 20, Color.LightGreen, Direcciones.Arriba));
+			cabeza = new Segmento(posInicial, 20, Color.Green, Keys.Up);
+			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 20), 20, Color.LightGreen, Keys.Up));
+			cuerpo.Add(new Segmento(new Point(posInicial.X, posInicial.Y + 40), 20, Color.LightGreen, Keys.Up));
 			picBox = cabeza.PicBox;
 			picCuerpo.Add(cuerpo[0].PicBox);
 			picCuerpo.Add(cuerpo[1].PicBox);
-			giro = new Giro(new Dictionary<Point, Direcciones>());
+			giros = new List<Giro>();
 		}
 
-		public void MoverSerpiente()
+		public void Actualizar()
 		{
 			switch (cabeza.Direccion)
 			{
-				case Direcciones.Arriba:
-					picBox.Top -= 20;
-					cabeza.Pos = new Point(cabeza.Pos.X, cabeza.Pos.Y-20);
+                case Keys.Up:
+					cabeza.PicBox.Location = new Point(cabeza.PicBox.Location.X, cabeza.PicBox.Location.Y-1);
 					break;
-				case Direcciones.Abajo:
-					picBox.Top += 20;
-					cabeza.Pos = new Point(cabeza.Pos.X, cabeza.Pos.Y+20);
+				case Keys.Down:
+					cabeza.PicBox.Location = new Point(cabeza.PicBox.Location.X, cabeza.PicBox.Location.Y+1);
 					break;
-				case Direcciones.Izquierda:
-					picBox.Left -= 20;
-					cabeza.Pos = new Point(cabeza.Pos.X-20, cabeza.Pos.Y);
+				case Keys.Left:
+					cabeza.PicBox.Location = new Point(cabeza.PicBox.Location.X-1, cabeza.PicBox.Location.Y);
 					break;
-				case Direcciones.Derecha:
-					picBox.Left += 20;
-					cabeza.Pos = new Point(cabeza.Pos.X+20, cabeza.Pos.Y);
+				case Keys.Right:
+					cabeza.PicBox.Location = new Point(cabeza.PicBox.Location.X+1, cabeza.PicBox.Location.Y);
 					break;
 			}
 			
 			MoverCuerpo();
+			Dibujar();
 		}
 
-		public void MoverCuerpo()
+        private void Dibujar()
+        {
+			cabeza.PicBox.Refresh();
+			foreach(Segmento segmento in cuerpo)
+			{
+				segmento.PicBox.Refresh();
+			}
+        }
+
+        public void MoverCuerpo()
 		{
 			for (int i = 0; i < cuerpo.Count; i++)
 			{
-				Console.WriteLine($"Pos: {cuerpo[i].Pos}, Existe: {giro.Giros.ContainsKey(cuerpo[i].Pos)}");
-				if (giro.Giros.ContainsKey(cuerpo[i].Pos))
+                //Console.WriteLine($"Pos: {cuerpo[i].PicBox.Location}, Existe: {giros.Find(x => x.Punto == cuerpo[i].PicBox.Location)}");
+                if (giros.Exists(x => x.Punto == cuerpo[i].PicBox.Location))
 				{
-					cuerpo[i].Direccion = giro.Giros[cuerpo[i].Pos];
+					cuerpo[i].Direccion = giros.Find(x => x.Punto == cuerpo[i].PicBox.Location).Direccion;
 					if (cuerpo[i] == cuerpo[cuerpo.Count-1])
 					{
-						giro.Giros.Remove(giro.Giros.Keys.First()); // Vamos a la lista de claves y sacamos la primera posición para borrar la pareja de datos
+						giros.Remove(giros[0]); // Vamos a la lista de claves y sacamos la primera posición para borrar la pareja de datos
 					}
 				}
 				
 				switch (cuerpo[i].Direccion)
 				{
-					case Direcciones.Arriba:
-						cuerpo[i].PicBox.Top -= 20;
-						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X, cuerpo[i].Pos.Y - 20);
+					case Keys.Up:
+						cuerpo[i].PicBox.Location = new Point(cuerpo[i].PicBox.Location.X, cuerpo[i].PicBox.Location.Y - 1);
 						break;
-					case Direcciones.Abajo:
-						cuerpo[i].PicBox.Top += 20;
-						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X, cuerpo[i].Pos.Y + 20);
+					case Keys.Down:
+						cuerpo[i].PicBox.Location = new Point(cuerpo[i].PicBox.Location.X, cuerpo[i].PicBox.Location.Y + 1); 
 						break;
-					case Direcciones.Izquierda:
-						cuerpo[i].PicBox.Left -= 20;
-						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X -20, cuerpo[i].Pos.Y);
+					case Keys.Left:
+						cuerpo[i].PicBox.Location = new Point(cuerpo[i].PicBox.Location.X - 1, cuerpo[i].PicBox.Location.Y);
 						break;
-					case Direcciones.Derecha:
-						cuerpo[i].PicBox.Left += 20;
-						cuerpo[i].Pos = new Point(cuerpo[i].Pos.X +20, cuerpo[i].Pos.Y);
+					case Keys.Right:
+						cuerpo[i].PicBox.Location = new Point(cuerpo[i].PicBox.Location.X + 1, cuerpo[i].PicBox.Location.Y);
 						break;
 				}
 				
 			}
 			
 		}
+
+		public Segmento AddCuerpo()
+		{
+			Point punto = new Point();
+			switch(cuerpo.Last().Direccion)
+			{
+				case Keys.Up:
+					punto = new Point(cuerpo.Last().PicBox.Location.X, cuerpo.Last().PicBox.Location.Y + 20);
+                    break;
+				case Keys.Down:
+					punto = new Point(cuerpo.Last().PicBox.Location.X, cuerpo.Last().PicBox.Location.Y - 20);
+                    break;
+				case Keys.Left:
+					punto = new Point(cuerpo.Last().PicBox.Location.X + 20, cuerpo.Last().PicBox.Location.Y);
+                    break;
+				case Keys.Right:
+					punto = new Point(cuerpo.Last().PicBox.Location.X - 20, cuerpo.Last().PicBox.Location.Y);
+                    break;
+			}
+			Segmento segmento = new Segmento(punto, 20, Color.LightGreen, cuerpo.Last().Direccion);
+			cuerpo.Add(segmento);
+			return segmento;
+        }
+
 	}
 }
