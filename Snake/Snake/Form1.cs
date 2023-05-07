@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace Snake
         private const Keys derecha = Keys.Right;
         private Stopwatch tiempo;
         private double ultimoTiempo;
-        private double contadorTiempo;
+        double contadorTiempo;
         private Keys ultimaDireccion;
         private Point posicion;
 
@@ -56,6 +57,17 @@ namespace Snake
             ultimaDireccion = arriba;
 
         }
+
+        public bool Derrota()
+        {
+			if (serpiente.cabeza.PicBox.Location.X <= 0 || serpiente.cabeza.PicBox.Location.X >= 700) return true;
+			if (serpiente.cabeza.PicBox.Location.Y <= 0 || serpiente.cabeza.PicBox.Location.Y >= 440) return true;
+			for (int i = 1; i < serpiente.cuerpo.Count; i++)
+			{
+                if (serpiente.cabeza.PicBox.Bounds.IntersectsWith(serpiente.cuerpo[i].PicBox.Bounds)) return true;
+			}
+			return false;
+		}
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -105,10 +117,14 @@ namespace Snake
                 comida.Actualizar(marcador);
             }
 
-            if (contadorTiempo >= 10000) contadorTiempo = 0;
+            //if (contadorTiempo >= 10000) contadorTiempo = 0;
 
             //serpiente.MoverCuerpo();
-            this.Invalidate();
-        }
+
+
+            if (Derrota()) MessageBox.Show("Has perdido");
+            else this.Invalidate();
+
+		}
     }
 }

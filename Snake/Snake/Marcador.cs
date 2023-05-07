@@ -15,7 +15,7 @@ namespace Snake
         private Label informacion = new Label();
         public int Puntos  { get; set; }
         public double TiempoVida { get; set; }
-        public Marcador()
+		public Marcador()
         {
             informacion.Font = new Font("Courier", 18);
             informacion.AutoSize = true;
@@ -28,7 +28,7 @@ namespace Snake
 
         public void Actualizar()
         {
-            informacion.Text = $"Puntos: {Puntos}\nTiempo: {--TiempoVida}";
+            informacion.Text = $"Puntos: {Puntos}\nTiempo: {TiempoVida}";
             informacion.Refresh();
         }
     }

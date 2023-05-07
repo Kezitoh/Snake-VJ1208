@@ -22,11 +22,30 @@ namespace Snake
         {
             picBox = new PictureBox();
             picBox.Location = punto;
-            picBox.BackColor = Color.Red;
+            //picBox.BackColor = Color.Red;
             picBox.Size = new Size(10,10);
             Duracion = duracion;
             this.valor = valor;
             timer = 0;
+            switch (valor)
+            {
+                case 2:
+                    picBox.BackColor = Color.Yellow;
+                    break;
+				case 3:
+					picBox.BackColor = Color.YellowGreen;
+					break;
+				case 4:
+					picBox.BackColor = Color.Green;
+					break;
+				case 5:
+					picBox.BackColor = Color.DarkGreen;
+					break;
+				case 6:
+					picBox.BackColor = Color.Red;
+					break;
+			}
+
         }
 
         public void Actualizar()
