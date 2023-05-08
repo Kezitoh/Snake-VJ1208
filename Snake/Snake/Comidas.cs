@@ -39,7 +39,6 @@ namespace Snake
 
             if(timer <= 0 && bocados.Count < 4)
             {
-                Console.WriteLine("Creo bocado");
                 Bocado bocado = new Bocado(random.Next(10,17), random.Next(2,7), new Point(random.Next(0,anchoPantalla),random.Next(0,altoPantalla)));
                 Controls.Add(bocado.PicBox);
                 bocados.Add(bocado);

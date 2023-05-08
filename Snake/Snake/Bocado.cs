@@ -22,7 +22,6 @@ namespace Snake
         {
             picBox = new PictureBox();
             picBox.Location = punto;
-            //picBox.BackColor = Color.Red;
             picBox.Size = new Size(10,10);
             Duracion = duracion;
             this.valor = valor;

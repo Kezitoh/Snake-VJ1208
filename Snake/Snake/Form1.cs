@@ -29,9 +29,10 @@ namespace Snake
         double contadorTiempo;
         private Keys ultimaDireccion;
         private Point posicion;
+        bool flagDerrota = true;
 
 
-        public Form1()
+		public Form1()
         {
             InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint
@@ -42,12 +43,11 @@ namespace Snake
             this.Width = anchoEscenario;
             this.Height = altoEscenario;
             this.BackColor = Color.LightGray;
-            serpiente = new Serpiente(new Point(this.Width / 2, this.Height / 2)); // Aquí se crea
-            Controls.Add(serpiente.picBox); // Aquí se añade a Controls
+            serpiente = new Serpiente(new Point(this.Width / 2, this.Height / 2)); 
+            Controls.Add(serpiente.picBox); 
             Controls.Add(serpiente.picCuerpo[0]);
             Controls.Add(serpiente.picCuerpo[1]);
             comida = new Comidas(anchoEscenario, altoEscenario, serpiente, Controls);
-            //Controls.Add(comida.MiPictureBox);
             marcador = new Marcador();
             Controls.Add(marcador.Informacion);
             marcador.Informacion.SendToBack();
@@ -60,71 +60,77 @@ namespace Snake
 
         public bool Derrota()
         {
-			if (serpiente.cabeza.PicBox.Location.X <= 0 || serpiente.cabeza.PicBox.Location.X >= 700) return true;
-			if (serpiente.cabeza.PicBox.Location.Y <= 0 || serpiente.cabeza.PicBox.Location.Y >= 440) return true;
+            bool derrota = false;
+            if ((serpiente.cabeza.PicBox.Location.X <= 0 || serpiente.cabeza.PicBox.Location.X >= 700) ||
+			(serpiente.cabeza.PicBox.Location.Y <= 0 || serpiente.cabeza.PicBox.Location.Y >= 440) ||
+			(marcador.TiempoVida <= 0)) derrota = true;
 			for (int i = 1; i < serpiente.cuerpo.Count; i++)
 			{
-                if (serpiente.cabeza.PicBox.Bounds.IntersectsWith(serpiente.cuerpo[i].PicBox.Bounds)) return true;
+                if (serpiente.cabeza.PicBox.Bounds.IntersectsWith(serpiente.cuerpo[i].PicBox.Bounds)) derrota = true;
 			}
-			return false;
+            
+            return derrota;
 		}
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Console.WriteLine("");
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case arriba:
-                    ultimaDireccion = arriba;
-                    break;
-                case abajo:
-                    ultimaDireccion = abajo;
-                    break;
-                case izquierda:
-                    ultimaDireccion = izquierda;
-                    break;
-                case derecha:
-                    ultimaDireccion = derecha;
-                    break;
-                    //default:
-                    //                ultimaDireccion = Direcciones.Arriba;
-                    //                break;
+            if (!(e.KeyCode == arriba && ultimaDireccion == abajo) && 
+                !(e.KeyCode == abajo && ultimaDireccion == arriba) && 
+                !(e.KeyCode == izquierda && ultimaDireccion == derecha) && 
+                !(e.KeyCode == derecha && ultimaDireccion == izquierda))
+            { 
+                switch (e.KeyCode)
+                {
+                    case arriba:
+                        ultimaDireccion = arriba;
+                        break;
+                    case abajo:
+                        ultimaDireccion = abajo;
+                        break;
+                    case izquierda:
+                        ultimaDireccion = izquierda;
+                        break;
+                    case derecha:
+                        ultimaDireccion = derecha;
+                        break;
+                }
+                posicion = serpiente.cabeza.PicBox.Location;
+                serpiente.cabeza.Direccion = ultimaDireccion;
+                serpiente.giros.Add(new Giro(posicion, ultimaDireccion));
             }
-            posicion = serpiente.cabeza.PicBox.Location;
-            serpiente.cabeza.Direccion = ultimaDireccion;
-            serpiente.giros.Add(new Giro(posicion, ultimaDireccion));
-            //Console.WriteLine($"Posicion: {posicion}, Direccion: {serpiente.giros.Last()}");
 
         }
 
-
-
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            double tiempoJuego = tiempo.ElapsedMilliseconds;
-            double tiempoTranscurrido = tiempoJuego - ultimoTiempo;
-            ultimoTiempo = tiempoJuego;
-            contadorTiempo += tiempoTranscurrido;
-            
-            if(contadorTiempo%10 == 0)
+            if (Derrota())
             {
-                marcador.Actualizar();
-                serpiente.Actualizar();
-                comida.Actualizar(marcador);
+                if (flagDerrota)
+                {
+					flagDerrota = false;
+					MessageBox.Show("Has perdido");
+				}
             }
+            else
+            {
+				double tiempoJuego = tiempo.ElapsedMilliseconds;
+				double tiempoTranscurrido = tiempoJuego - ultimoTiempo;
+				ultimoTiempo = tiempoJuego;
+				contadorTiempo += tiempoTranscurrido;
 
-            //if (contadorTiempo >= 10000) contadorTiempo = 0;
+				if (contadorTiempo % 10 == 0)
+				{
+					marcador.Actualizar();
+					serpiente.Actualizar();
+                    comida.Actualizar(marcador);
+				}
+				this.Invalidate();
+			}
 
-            //serpiente.MoverCuerpo();
-
-
-            if (Derrota()) MessageBox.Show("Has perdido");
-            else this.Invalidate();
-
-		}
+        }
     }
 }

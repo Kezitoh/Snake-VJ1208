@@ -64,13 +64,12 @@ namespace Snake
 		{
 			for (int i = 0; i < cuerpo.Count; i++)
 			{
-                //Console.WriteLine($"Pos: {cuerpo[i].PicBox.Location}, Existe: {giros.Find(x => x.Punto == cuerpo[i].PicBox.Location)}");
                 if (giros.Exists(x => x.Punto == cuerpo[i].PicBox.Location))
 				{
 					cuerpo[i].Direccion = giros.Find(x => x.Punto == cuerpo[i].PicBox.Location).Direccion;
 					if (cuerpo[i] == cuerpo[cuerpo.Count-1])
 					{
-						giros.Remove(giros[0]); // Vamos a la lista de claves y sacamos la primera posición para borrar la pareja de datos
+						giros.Remove(giros[0]);
 					}
 				}
 				
